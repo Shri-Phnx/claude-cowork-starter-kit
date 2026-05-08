@@ -10,16 +10,17 @@ If you've never heard of Claude Cowork, it's a feature inside the Claude Desktop
 
 1. [Who this is for](#who-this-is-for)
 2. [What you get](#what-you-get)
-3. [Prerequisites](#prerequisites)
-4. [Setup on Windows](#setup-on-windows)
-5. [Setup on Mac](#setup-on-mac)
-6. [Customise the templates](#customise-the-templates)
-7. [Verify it works](#verify-it-works)
-8. [Optional: back up your setup to GitHub](#optional-back-up-your-setup-to-github)
-9. [Optional: schedule a monthly auto-backup](#optional-schedule-a-monthly-auto-backup)
-10. [Troubleshooting](#troubleshooting)
-11. [What's in each file](#whats-in-each-file)
-12. [Credits and feedback](#credits-and-feedback)
+3. [Recommended folder layout (and why)](#recommended-folder-layout-and-why)
+4. [Prerequisites](#prerequisites)
+5. [Setup on Windows](#setup-on-windows)
+6. [Setup on Mac](#setup-on-mac)
+7. [Customise the templates](#customise-the-templates)
+8. [Verify it works](#verify-it-works)
+9. [Optional: back up your setup to GitHub](#optional-back-up-your-setup-to-github)
+10. [Optional: schedule a monthly auto-backup](#optional-schedule-a-monthly-auto-backup)
+11. [Troubleshooting](#troubleshooting)
+12. [What's in each file](#whats-in-each-file)
+13. [Credits and feedback](#credits-and-feedback)
 
 ---
 
@@ -45,6 +46,52 @@ By the end of this guide:
 3. Claude writes in plain, human-sounding prose. No "delve," no em dashes, no AI tells.
 4. Claude maintains a memory file that survives across sessions, so you don't repeat yourself.
 5. Optional: a private GitHub backup of your whole setup, with monthly automation.
+
+---
+
+## Recommended folder layout (and why)
+
+The recommended structure mounts Cowork at a **parent** Claude folder, with `CLAUDE.md` and the `About Me/` folder at the root, and your individual projects as sub-folders alongside them.
+
+```
+C:\Users\<you>\OneDrive\Documents\Claude\        ← Cowork mount root
+├── CLAUDE.md                                     ← global instructions (loaded every session)
+├── About Me\
+│   ├── about-me.md                               ← identity, role, business, tools, projects
+│   ├── writing-rules.md                          ← anti-AI writing guide
+│   └── memory.md                                 ← persistent memory across sessions
+├── Cowork folder\                                ← optional: legacy or general-purpose subfolder
+├── Scheduled\                                    ← scheduled task definitions (Cowork manages this)
+├── backup-logs\                                  ← created by the monthly backup task
+└── Project Subfolders\                           ← one per project, as many as you like
+    ├── Job listing and application automation\
+    ├── Content scraping and generating automation\
+    ├── Creating Second brain\
+    ├── AI Trend Scraper Build\
+    └── Video generation automation\
+```
+
+### Why this layout
+
+**One identity, many projects.** Your `CLAUDE.md` and About Me files at the root mean Claude loads the same identity, voice, safety rules, and memory regardless of which project sub-folder you happen to be working in. You don't have to copy-paste these files into every project.
+
+**Projects stay organised but share context.** Each project gets its own sub-folder for its working files (drafts, exports, references). Claude can see them all because they sit inside the mounted root, but each project's working files don't leak into other projects.
+
+**Scheduled tasks see everything.** The monthly backup, weekly memory consolidation, and any other recurring task can read every file in the tree. If you mounted only one project sub-folder, scheduled tasks would only see that one slice.
+
+**Memory survives across projects.** Decisions you make in one project (e.g. "always use British English in CVs") get written to the shared `memory.md` and apply to every other project automatically. No more repeating yourself.
+
+**One backup covers everything.** When you set up the optional monthly GitHub backup, it captures the entire tree in one push. Adding a new project? It's automatically included in next month's backup with no extra configuration.
+
+### When to use a single sub-folder mount instead
+
+Mount a single sub-folder (e.g. `Documents\Claude\Cowork folder`) only if:
+
+- You want strict isolation between Claude work and other personal files.
+- You're trying Cowork for the first time and want minimum scope.
+- You have a specific project that should not share identity with the rest.
+
+For most users, parent-mount is the better default.
 
 ---
 
@@ -75,20 +122,18 @@ That's it.
 - **Why:** every feature (Cowork, plugins, scheduled tasks, Global Instructions) is tied to your signed-in account.
 - **How:** the app opens your browser for sign-in. Complete sign-in there. The browser hands control back to the desktop app once you're authenticated. You'll land on the main Claude window.
 
-### Step 3: Create your Cowork folder
+### Step 3: Create your parent Claude folder
 
 - **Where:** Windows File Explorer (open it from the taskbar or press `Windows key + E`).
-- **What:** create a new folder where your Cowork data will live.
-- **Why:** Cowork needs a real folder on your computer to point at. Anything you save through Cowork lives here, and it's the same place Claude reads `CLAUDE.md` from.
-- **Recommended path:** `C:\Users\<your-username>\OneDrive\Documents\Claude\Cowork folder`. Replace `<your-username>` with your actual Windows username.
-- **Why this path:** putting it under OneDrive means OneDrive syncs the folder as a free secondary backup. If you don't use OneDrive, use `C:\Users\<your-username>\Documents\Claude\Cowork folder` instead.
+- **What:** create a single parent folder where all your Claude work will live. This becomes your Cowork mount root.
+- **Recommended path:** `C:\Users\<your-username>\OneDrive\Documents\Claude`. Replace `<your-username>` with your actual Windows username.
+- **Why this path:** putting it under OneDrive means OneDrive syncs the folder as a free secondary backup. If you don't use OneDrive, use `C:\Users\<your-username>\Documents\Claude` instead.
 - **How:**
   1. In File Explorer, navigate to `C:\Users\<your-username>\OneDrive\Documents\` (or just `C:\Users\<your-username>\Documents\`).
-  2. Right-click on empty space, choose **New**, then **Folder**. Name it `Claude`.
-  3. Open the `Claude` folder.
-  4. Right-click again, **New**, **Folder**. Name it `Cowork folder`.
+  2. Right-click on empty space, choose **New**, then **Folder**. Name it `Claude` exactly.
+  3. Open the `Claude` folder. Leave it empty for now. The next step fills it.
 
-### Step 4: Download this starter kit into the Cowork folder
+### Step 4: Download this starter kit into the Claude folder
 
 You have two options. Pick the one that suits you.
 
@@ -98,7 +143,7 @@ You have two options. Pick the one that suits you.
 2. Click the green **Code** button.
 3. Click **Download ZIP** at the bottom of the dropdown.
 4. The ZIP downloads to your Downloads folder. Right-click it and choose **Extract All**.
-5. Inside the extracted folder you'll see `CLAUDE.md`, an `About Me` folder, and `README.md`. Move all of these into your `Cowork folder` (the one you created in Step 3). You can ignore the README from the ZIP if you want; it's the same content as this page.
+5. Inside the extracted folder you'll see `CLAUDE.md`, an `About Me` folder, and `README.md`. Move all of these into your `Claude` folder (the one you created in Step 3). They sit directly at the root, not inside any subfolder.
 
 **Option B: Clone with GitHub Desktop (slightly more setup, easier to update later).**
 
@@ -106,13 +151,14 @@ You have two options. Pick the one that suits you.
 2. In GitHub Desktop, click **File**, then **Clone repository**.
 3. Click the **URL** tab.
 4. **Repository URL field:** paste `https://github.com/Shri-Phnx/claude-cowork-starter-kit`.
-5. **Local path field:** click **Choose** and pick your `Cowork folder` (the one from Step 3).
+5. **Local path field:** click **Choose** and pick your `Claude` folder (the parent one, from Step 3). Important: the local path is the parent `Claude` folder, not a subfolder inside it.
 6. Click **Clone**.
+7. After cloning, the cloned files might end up inside a subfolder named `claude-cowork-starter-kit`. If so, move `CLAUDE.md`, the `About Me/` folder, and `README.md` up one level so they sit directly inside `Claude`. Delete the now-empty `claude-cowork-starter-kit` subfolder.
 
 After either option, your folder should look like this:
 
 ```
-C:\Users\<your-username>\OneDrive\Documents\Claude\Cowork folder\
+C:\Users\<your-username>\OneDrive\Documents\Claude\
   ├── CLAUDE.md
   ├── README.md
   └── About Me\
@@ -121,27 +167,27 @@ C:\Users\<your-username>\OneDrive\Documents\Claude\Cowork folder\
       └── memory.md
 ```
 
-### Step 5: Point Cowork at your folder
+### Step 5: Point Cowork at the parent Claude folder
 
 - **Where:** Claude Desktop, **Settings → Cowork**.
-- **What:** tell Cowork where your folder lives.
-- **Why:** without this step, Cowork doesn't know which folder is yours and won't load your `CLAUDE.md`.
+- **What:** tell Cowork to use the parent `Claude` folder as its working root.
+- **Why:** with this set, Claude loads `CLAUDE.md` and the About Me files automatically in every session, and any project sub-folder you add later inherits the same identity.
 - **How:**
   1. Open Claude Desktop.
   2. Click your profile icon (top of the window).
   3. Click **Settings**.
   4. In the Settings sidebar on the left, click **Cowork**.
   5. Find the option labelled **Cowork directory**, **Working folder**, or similar. Click **Browse** or **Change**.
-  6. Navigate to `C:\Users\<your-username>\OneDrive\Documents\Claude\Cowork folder` and select it.
+  6. Navigate to `C:\Users\<your-username>\OneDrive\Documents\Claude` (the parent, not a subfolder) and select it.
   7. Confirm. The setting saves automatically.
 
 ### Step 6: Paste Global Instructions
 
 - **Where:** Claude Desktop, **Settings → Cowork → Global Instructions**.
-- **What:** Global Instructions are persistent rules Claude reads at the start of every Cowork session, regardless of which folder you're working in.
+- **What:** Global Instructions are persistent rules Claude reads at the start of every Cowork session, regardless of which folder is mounted.
 - **Why:** the local `CLAUDE.md` in your folder covers folder-specific instructions. Global Instructions are the universal layer that travels with you. Best practice is to keep both in sync.
 - **How:**
-  1. Open `Cowork folder/CLAUDE.md` in any text editor (Notepad, VS Code, even Word in plain text mode).
+  1. Open `Claude/CLAUDE.md` in any text editor (Notepad, VS Code, even Word in plain text mode).
   2. Select all (`Ctrl+A`), copy (`Ctrl+C`).
   3. In Claude Desktop, go to **Settings → Cowork → Global Instructions**.
   4. Click **Edit**.
@@ -150,7 +196,7 @@ C:\Users\<your-username>\OneDrive\Documents\Claude\Cowork folder\
 
 ### Step 7: Done. Skip to "Customise the templates"
 
-You now have a working Cowork setup with universal templates. Move on to the [Customise the templates](#customise-the-templates) section to fill in your details.
+You now have a working Cowork setup with universal templates at the parent root. Move on to the [Customise the templates](#customise-the-templates) section to fill in your details.
 
 ---
 
@@ -166,16 +212,16 @@ You now have a working Cowork setup with universal templates. Move on to the [Cu
 
 Same as Windows Step 2 above.
 
-### Step 3: Create your Cowork folder
+### Step 3: Create your parent Claude folder
 
 - **Where:** Finder.
-- **Recommended path:** `~/Documents/Claude/Cowork folder` (the `~` means your home folder).
-- **Why this path:** simple and consistent. If you use OneDrive on Mac, the path is longer and lives under `~/Library/CloudStorage/OneDrive-Personal/Documents/Claude/`. Use that if you want OneDrive sync, otherwise stick with `~/Documents/Claude/`.
+- **Recommended path:** `~/Documents/Claude` (the `~` means your home folder).
+- **Why this path:** simple and consistent. If you use OneDrive on Mac, the path is longer and lives under `~/Library/CloudStorage/OneDrive-Personal/Documents/Claude`. Use that if you want OneDrive sync, otherwise stick with `~/Documents/Claude`.
 - **How:**
   1. Open Finder.
   2. Navigate to `~/Documents/`.
-  3. Right-click in empty space, choose **New Folder**. Name it `Claude`.
-  4. Open `Claude`. Right-click, **New Folder**. Name it `Cowork folder`.
+  3. Right-click in empty space, choose **New Folder**. Name it `Claude` exactly.
+  4. Leave it empty for now.
 
 ### Step 4: Download this starter kit
 
@@ -185,19 +231,20 @@ Same two options as Windows Step 4.
 
 1. `https://github.com/Shri-Phnx/claude-cowork-starter-kit` → green **Code** button → **Download ZIP**.
 2. Double-click the ZIP in Downloads to extract.
-3. Move the extracted files into your `Cowork folder`.
+3. Move `CLAUDE.md`, the `About Me/` folder, and `README.md` into your `Claude` folder. They sit at the root.
 
 **Option B: GitHub Desktop.**
 
 1. Download from `https://desktop.github.com`. Drag to Applications. Sign in.
 2. **File → Clone repository → URL tab.**
 3. URL: `https://github.com/Shri-Phnx/claude-cowork-starter-kit`.
-4. Local path: `~/Documents/Claude/Cowork folder`.
+4. Local path: `~/Documents/Claude`.
 5. Click **Clone**.
+6. If files land in a subfolder, move them up one level so they sit at the root of `Claude`.
 
-### Step 5: Point Cowork at your folder
+### Step 5: Point Cowork at the parent Claude folder
 
-- Same as Windows Step 5, just using Claude on Mac. The settings menu lives at **Claude → Settings** or **Claude → Preferences** depending on version.
+- Same as Windows Step 5, just using Claude on Mac. The settings menu lives at **Claude → Settings** or **Claude → Preferences** depending on version. Select `~/Documents/Claude` as the directory.
 
 ### Step 6: Paste Global Instructions
 
@@ -213,7 +260,7 @@ You now have a working Cowork setup, but the templates are full of `[TODO: ...]`
 
 ### Easiest path: ask Claude to walk you through it
 
-1. Open a new Cowork chat in Claude Desktop, with your Cowork folder selected.
+1. Open a new Cowork chat in Claude Desktop, with your Claude folder selected.
 2. Paste this message:
 
    > Walk me through filling in `CLAUDE.md` and `About Me/about-me.md`. Ask me one section at a time, suggest defaults where it makes sense, and update the files as we go. Once we're done, do the same for `About Me/memory.md`.
@@ -238,7 +285,7 @@ Now check that everything is loading correctly.
 
 1. Close any open Cowork chats.
 2. Open a brand-new Cowork chat (important: must be new, not a continuation of an old one).
-3. Confirm your Cowork folder is selected at the top of the chat.
+3. Confirm your Claude folder is selected at the top of the chat.
 4. Type this probe question:
 
    > "What's my name, and what's the first safety rule you should follow?"
@@ -251,7 +298,7 @@ Now check that everything is loading correctly.
 
 ## Optional: back up your setup to GitHub
 
-If you want a private cloud backup of your Cowork folder, follow this section. Skip if you don't use GitHub.
+If you want a private cloud backup of your Claude folder, follow this section. Skip if you don't use GitHub.
 
 ### Why bother
 
@@ -286,9 +333,9 @@ After this, Claude can push to and read from your repos. It still cannot create 
 
 In a Cowork chat:
 
-> Push the contents of my Cowork folder to my private GitHub repo at `Shri-Phnx/cowork-personal-backup`. Include `CLAUDE.md`, the `About Me/` folder, and any other `.md` files at the root. Write a detailed restore README first so I can recover on a new machine.
+> Push the contents of my Claude folder to my private GitHub repo at `<your-username>/cowork-personal-backup`. Include `CLAUDE.md`, the `About Me/` folder, and any other `.md` files at the root and in project sub-folders. Skip the `Scheduled/` folder and any `backup-logs/` folder. Write a detailed restore README first so I can recover on a new machine.
 
-Claude will read the files, push them, and write a restore README. Verify the files appear at `https://github.com/Shri-Phnx/cowork-personal-backup`.
+Claude will read the files, push them, and write a restore README. Verify the files appear at `https://github.com/<your-username>/cowork-personal-backup`.
 
 ---
 
@@ -300,7 +347,7 @@ To make backups automatic, schedule a Cowork task that runs once a month and pus
 
 In a Cowork chat:
 
-> Create a scheduled task that runs on the 1st of every month at 11:00 AM (my local time). The task should push any changes from my Cowork folder to my private repo at `Shri-Phnx/cowork-personal-backup`. After each run, write a status file to a `backup-logs/` folder in the Cowork folder (named `yyyy-mm-dd-monthly-backup.md`) summarising what was pushed, what was skipped, and what failed. Append a one-line entry to `About Me/memory.md` under a "Scheduled Run Log" section.
+> Create a scheduled task that runs on the 1st of every month at 11:00 AM (my local time). The task should push any changes from my parent Claude folder to my private repo at `<your-username>/cowork-personal-backup`. Use Glob to discover all `.md` files at the root and in sub-folders, but skip the `Scheduled/` and `backup-logs/` folders. After each run, write a status file to a `backup-logs/` folder at the parent root (named `yyyy-mm-dd-monthly-backup.md`) summarising what was pushed, what was skipped, and what failed. Append a one-line entry to `About Me/memory.md` under a "Scheduled Run Log" section.
 
 Claude will configure the task using the Cowork scheduled-tasks tool. The task definition lives in your Cowork app's **Dispatch** panel, where you can also see each run's history.
 
@@ -309,8 +356,8 @@ Claude will configure the task using the Cowork scheduled-tasks tool. The task d
 You can wait until the 1st of the next month, or you can ask Claude to run the same task immediately as a one-off so you see it work. The output should be:
 
 1. New commit on your private repo.
-2. New file at `Cowork folder/backup-logs/yyyy-mm-dd-monthly-backup.md`.
-3. New entry in `Cowork folder/About Me/memory.md` under Scheduled Run Log.
+2. New file at `Claude/backup-logs/yyyy-mm-dd-monthly-backup.md`.
+3. New entry in `Claude/About Me/memory.md` under Scheduled Run Log.
 4. New entry in your Cowork app's Dispatch panel.
 
 If any of those four are missing, troubleshoot by asking Claude what failed.
@@ -321,8 +368,8 @@ If any of those four are missing, troubleshoot by asking Claude what failed.
 
 ### Claude doesn't know my name when I ask the probe question
 
-1. Confirm your Cowork folder is selected at the top of the chat.
-2. Confirm `CLAUDE.md` exists at the root of that folder, and `About Me/about-me.md` exists inside the `About Me` subfolder.
+1. Confirm your Claude folder is selected at the top of the chat.
+2. Confirm `CLAUDE.md` exists at the root of that folder, and `About Me/about-me.md` exists inside the `About Me` subfolder. They should be at the parent root, not nested inside another subfolder.
 3. Confirm you actually filled in the `[TODO: Your full name]` placeholder in `about-me.md`. If it still says `[TODO: ...]`, Claude has nothing to read.
 4. Confirm you clicked **Save** after pasting Global Instructions in Step 6.
 5. Start a brand-new chat (not a continuation of an old one). Global Instructions only apply to chats started after they were saved.
@@ -341,9 +388,16 @@ This is expected. The Claude GitHub MCP Connector cannot create new repos. Alway
 
 Either Global Instructions weren't saved properly, or this is the first message in a session that started before you saved them. Open a brand-new chat and try again. If it persists, re-paste Global Instructions and click Save.
 
-### Cowork won't let me select my folder
+### Cowork won't let me select the parent folder
 
-Some Cowork builds restrict folder selection to specific user directories. If `Documents/Claude/Cowork folder` doesn't work, try `Documents/Claude` (without the subfolder) or `Documents` directly.
+Some Cowork builds restrict folder selection to specific user directories. The parent `Documents/Claude` location should always work. If it doesn't, you can fall back to a single sub-folder mount (see [When to use a single sub-folder mount instead](#when-to-use-a-single-sub-folder-mount-instead)).
+
+### I previously had Cowork mounted at a subfolder. How do I switch?
+
+1. In File Explorer (Windows) or Finder (Mac), move `CLAUDE.md` and the `About Me/` folder up one level from your subfolder to the parent `Claude` folder.
+2. In Claude Desktop, go to **Settings → Cowork** and change the directory selection from the subfolder to the parent `Claude` folder.
+3. Start a new chat. The probe question should now work from the parent root.
+4. If you have a scheduled monthly backup task, ask Claude to update the task's prompt to use the new parent-root paths.
 
 ---
 
@@ -365,4 +419,4 @@ Found a bug, hit a confusing step, or want to suggest an improvement? Open an is
 
 ---
 
-*Last updated: 2026-05-06.*
+*Last updated: 2026-05-07.*
